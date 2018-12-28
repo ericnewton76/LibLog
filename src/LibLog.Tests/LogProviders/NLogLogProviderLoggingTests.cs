@@ -179,5 +179,35 @@
                 _target.Logs[0].ShouldBe("INFO||World|m|");
             }
         }
+
+        [Fact]
+        public void speed_test()
+        {
+            var elapsedCollection = new System.Collections.Generic.List<int>();
+            var sw = new System.Diagnostics.Stopwatch();
+
+            for(int j = 0; j < 10; j++)
+            {
+                sw.Start();
+
+                for(int i = 0; i < 20000; i++)
+                {
+                    _sut.Info("m");
+                    _sut.Error("e");
+                    _sut.Warn("w");
+                    _sut.Debug("d");
+                    _sut.Trace("t");
+                }
+
+                sw.Stop();
+
+                Console.Write("Speed Test {0}: Completed 100,000 iterations in {1}ms", (j + 1), sw.ElapsedMilliseconds);
+                elapsedCollection.Add((int)sw.ElapsedMilliseconds);
+                Console.WriteLine(" Avg={0:0.0}", System.Linq.Queryable.Average(System.Linq.Queryable.AsQueryable(elapsedCollection)));
+
+                sw.Reset();
+            }
+        }
+
     }
 }
